@@ -1,0 +1,5 @@
+﻿  control_task3.c
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task3\control_task3.c(12,37): warning C4047: =: "int *" отличается по уровням косвенного обращения от "int"
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task3\control_task3.c(8,7): warning C4101: indexes: неиспользованная локальная переменная
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task3\control_task3.c(6,9): warning C4101: count: неиспользованная локальная переменная
+  Control_task3.vcxproj -> W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Debug\Control_task3.exe

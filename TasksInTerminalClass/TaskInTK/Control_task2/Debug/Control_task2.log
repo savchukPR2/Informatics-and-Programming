@@ -1,0 +1,4 @@
+﻿  control_task2.c
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task2\control_task2.c(12,37): warning C4047: =: "int *" отличается по уровням косвенного обращения от "int"
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task2\control_task2.c(13,40): warning C4047: =: "int *" отличается по уровням косвенного обращения от "int"
+  Control_task2.vcxproj -> W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Debug\Control_task2.exe

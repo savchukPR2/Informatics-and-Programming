@@ -1,0 +1,6 @@
+﻿  control_task1.c
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task1\control_task1.c(14,37): warning C4047: =: "int *" отличается по уровням косвенного обращения от "int"
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task1\control_task1.c(22,7): warning C4013: srand: нет определения; предполагается "extern" с возвратом типа "int"
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task1\control_task1.c(22,12): warning C4013: time: нет определения; предполагается "extern" с возвратом типа "int"
+W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Control_task1\control_task1.c(24,17): warning C4013: rand: нет определения; предполагается "extern" с возвратом типа "int"
+  Control_task1.vcxproj -> W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Debug\Control_task1.exe
