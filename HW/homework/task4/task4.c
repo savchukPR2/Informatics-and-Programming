@@ -9,27 +9,36 @@
 #define false 0
 #endif
 #define SIZE 10
+#define BAR_LEN 5
+#define PROD_LEN 20 
+#define MAX_CHECK_COUNT 100
 
 
-#define SCAN_CURRENT_PRODUCT 0 //Pointer for scanning product
-#define SHOW_PRODUCT 1 //Pointer for outputing product
-#define ADD_TO_CHECK 2 //Pointer for inputing products in check
-#define CREATE_CHECK 3 //Pointer for generating check with products
-#define CALCULATE_COST 4 //Pointer for calculating the coast for all products
-#define EXIT_PROGRAMM 5 //Pointer for exit
-#define SHOW_ALL_PRODUCTS 6
+#define SCAN_CURRENT_PRODUCT 1 //Pointer for scanning product
+#define SHOW_PRODUCT 2 //Pointer for outputing product
+#define ADD_TO_CHECK 3 //Pointer for inputing products in check
+#define CREATE_CHECK 4 //Pointer for generating check with products
+#define CALCULATE_COST 5 //Pointer for calculating the coast for all products
+#define EXIT_PROGRAMM 6 //Pointer for exit
+#define SHOW_ALL_PRODUCTS 0
+#define SHOW_MENU 7
 
-char products[SIZE][20];
-char barcodes[SIZE][5];
+char products[SIZE][PROD_LEN];
+char barcodes[SIZE][BAR_LEN];
 int prices[SIZE];
 int discounts[SIZE];
+int last_prod_index = -1;
+
+int pay_check[MAX_CHECK_COUNT][2];
+int check_count = 0;
+
 
 int user_choice() {
 	int state = 0;
 	while (true) {
-		printf("\nInput the state: \n 0 - scanning product\n 1 - showing all your products\n 2 - add product in check\n 3 - generate your check\n 4 - calculate cost for your order\n 5 - Exit programm\n 6 - Show all products in the shop\n");
+		printf("take a number: ");
 		scanf_s("%d", &state);
-		if ((state >= SCAN_CURRENT_PRODUCT) && (state <= SHOW_ALL_PRODUCTS))
+		if ((state >= SHOW_ALL_PRODUCTS) && (state <= SHOW_MENU))
 			break;
 	}
 	return state;
@@ -39,17 +48,7 @@ int user_choice() {
 
 
 void define_products() {
-	/* products[0][20] = "Apples(1kg)\0";
-	products[1][20] = "Bananas(1kg)\0";
-	products[2][20] = "Pineapple(1kg)\0";
-	products[3][20] = "Oranges(1kg)\0";
-	products[4][20] = "Headphones(1 pair)\0";
-	products[5][20] = "TShort(1 piece)\0";
-	products[6][20] = "Shampoo(1 piece)\0";
-	products[7][20] = "Gel Shower(1 piece)\0";
-	products[8][20] = "Tea(1 bag)\0";
-	products[9][20] = "Apples(1kg)\0"; */
-	//define price of products in two-dimensional array
+
 	strcpy_s(products[0], 20,  "Apples(1kg)");
 	strcpy_s(products[1], 20, "Bananas(1kg)");
 	strcpy_s(products[2], 20, "Pineapple(1kg)");
@@ -63,39 +62,39 @@ void define_products() {
 
 	//define barcodes for each product
 	strcpy_s(barcodes[0], 5, "0001");
-	strcpy_s(barcodes[1], 5, "0002");
-	strcpy_s(barcodes[2], 5, "0003");
-	strcpy_s(barcodes[3], 5, "0004");
-	strcpy_s(barcodes[4], 5, "0005");
-	strcpy_s(barcodes[5], 5, "0006");
-	strcpy_s(barcodes[6], 5, "0007");
-	strcpy_s(barcodes[7], 5, "0008");
-	strcpy_s(barcodes[8], 5, "0009");
-	strcpy_s(barcodes[9], 5, "0010");
+strcpy_s(barcodes[1], 5, "0002");
+strcpy_s(barcodes[2], 5, "0003");
+strcpy_s(barcodes[3], 5, "0004");
+strcpy_s(barcodes[4], 5, "0005");
+strcpy_s(barcodes[5], 5, "0006");
+strcpy_s(barcodes[6], 5, "0007");
+strcpy_s(barcodes[7], 5, "0008");
+strcpy_s(barcodes[8], 5, "0009");
+strcpy_s(barcodes[9], 5, "0010");
 
-	//define price for each product
-	prices[0] = 100;
-	prices[1] = 150;
-	prices[2] = 109;
-	prices[3] = 200;
-	prices[4] = 179;
-	prices[5] = 1800;
-	prices[6] = 500;
-	prices[7] = 350;
-	prices[8] = 300;
-	prices[9] = 200;
-	
-	//define discount for each product
-	discounts[0] = 0;
-	discounts[1] = 0;
-	discounts[2] = 0;
-	discounts[3] = 10;
-	discounts[4] = 5;
-	discounts[5] = 25;
-	discounts[6] = 10;
-	discounts[7] = 40;
-	discounts[8] = 0;
-	discounts[9] = 5;
+//define price for each product
+prices[0] = 100;
+prices[1] = 150;
+prices[2] = 109;
+prices[3] = 200;
+prices[4] = 179;
+prices[5] = 1800;
+prices[6] = 500;
+prices[7] = 350;
+prices[8] = 300;
+prices[9] = 200;
+
+//define discount for each product
+discounts[0] = 0;
+discounts[1] = 0;
+discounts[2] = 0;
+discounts[3] = 10;
+discounts[4] = 5;
+discounts[5] = 25;
+discounts[6] = 10;
+discounts[7] = 40;
+discounts[8] = 0;
+discounts[9] = 5;
 
 }
 
@@ -108,26 +107,65 @@ show_products() {
 	printf("-------------------------------------------------------------------\n");
 }
 
+//function for searching product by barcode
+bool find_product(char* barcode, int* prod_index) {
+	for (int i = 0; i < SIZE; i++) {
+		if (strcmp(barcode, barcodes[i]) == 0) {
+			*prod_index = i;
+			return true;
+		}
+	}
+	return false;
+}
 
 //function for scanning products
 int scan_product() {
-	printf("Scanning product...\n");
+	printf("Input product barcode\n");
+	char barcode[BAR_LEN];
+	int i;
+
+	scanf_s("%s", &barcode, BAR_LEN);
+
+	if (find_product(barcode, &i))
+		last_prod_index = i;
+	else
+		printf("Didnt find barcode");
+
 }
 
 //function for showing products on the screen and choose your number
 int show_product() {
-	printf("Showing product...\n");
+	if (last_prod_index > -1) {
+		printf("Product              \t  cost \t       discount\t       barcode\n");
+		printf("%-20s \t %5d \t\t %5d \t\t %s\n", products[last_prod_index], prices[last_prod_index], discounts[last_prod_index], barcodes[last_prod_index]);
+	}
 }
 
 
 //function adding products to check
 int add_to_check() {
-	printf("adding product to check...\n");
+	if ((check_count >= MAX_CHECK_COUNT) || (last_prod_index < 0))
+		return;
+	if (check_count == 0) {
+		check_count++;
+		pay_check[0][0] = -1;
+	}
+	if (pay_check[check_count - 1][0] == last_prod_index)
+		pay_check[check_count - 1][1]++;
+	else
+	{
+		check_count++;
+		pay_check[check_count - 1][1] = 1;
+		pay_check[check_count - 1][0] = last_prod_index;
+	}
 }
 
 //function for creating check with products
 int create_check() {
-	printf("Creating check...\n");
+	printf("Product              \t  cost \t       discount\t       barcode\n");
+	for (int i = 0; i < check_count; i++){
+		printf("%d) %-20s \t %5d \t\t %5d \t\t %s\n",pay_check[check_count - 1][0], products[last_prod_index], prices[last_prod_index], discounts[last_prod_index], barcodes[last_prod_index]);
+	}
 }
 
 //function for caclulating all coast for products in check
@@ -139,11 +177,15 @@ int calculate_cost() {
 int exit_programm() {
 	printf("Exiting programm...\n");
 }
+show_menu() {
+	printf("\nInput the state: \n 0 - show all products\n 1 - scan current product\n 2 - show current product\n 3 - add product to check\n 4 - create check\n 5 - calculate cost\n 6 - Exit programm\n 7 - Show menu\n");
+}
 
 	
 
 int main() {
 	define_products();
+	printf("\nInput the state: \n 0 - show all products\n 1 - scan current product\n 2 - show current product\n 3 - add product to check\n 4 - create check\n 5 - calculate cost\n 6 - Exit programm\n 7 - Show menu\n");
 	while (true) {
 		switch (user_choice())
 		{
@@ -167,6 +209,9 @@ int main() {
 			break;
 		case SHOW_ALL_PRODUCTS:
 			show_products();
+			break;
+		case SHOW_MENU:
+			show_menu();
 			break;
 		}
 	}
