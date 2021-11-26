@@ -139,7 +139,7 @@ int scan_product() {
 //function for showing products on the screen and choose your number
 int show_product() {
 	if (last_prod_index > -1) {
-		printf("Product              \t  cost \t       discount\t       barcode\n");
+		printf("Product      \t		cost \t		discount\t		barcode\n");
 		printf("%-20s \t %.1f \t\t %.1f \t\t %s\n", products[last_prod_index], prices[last_prod_index], discounts[last_prod_index], barcodes[last_prod_index]);
 	}
 }
