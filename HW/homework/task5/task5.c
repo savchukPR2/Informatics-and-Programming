@@ -5,6 +5,7 @@
 #include "W:\Informatics-and-Programming\HW\homework\dirent-master\include\dirent.h"
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <time.h>
 
 //Initialization of bool parameters
 #ifndef __cplusplus
@@ -24,6 +25,7 @@ char files_in_dir[SIZE][40];
 int count_of_files[SIZE][2];
 int i = 0;
 int sorted_mass[SIZE][2];
+
 
 
 int get_file_size(const char* file) {
@@ -177,7 +179,6 @@ int main() {
 		_Exit(EXIT_SUCCESS);
 		break;
 	}
-
 
 
 	return 0;

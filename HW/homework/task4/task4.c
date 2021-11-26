@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #ifndef __cplusplus
 #define bool int
 #define true 1
 #define false 0
 #endif
+
 #define SIZE 10
 #define BAR_LEN 5
 #define PROD_LEN 20 
