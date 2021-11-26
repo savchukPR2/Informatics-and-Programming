@@ -1,23 +1,76 @@
-//Savchuk Anton 12.11.21
-#include <stdio.h>
+#ifndef __cplusplus
+#define bool int
+#define true 1
+#define false 0
+#endif
 
-int reverse(int num, int result){
-	if (num)
-	{
-		return reverse(num / 10, (result * 10) + (num % 10));
+#define RECURS 0
+#define BASE 1
+
+#include <stdio.h>
+#include <math.h>
+
+int div = 0;
+int num;
+
+simple_num(n, div) {
+
+	printf("recursion method: \n");
+
+	if (div == 0)
+		div = n - 1;
+	while (div >= 2) {
+		if (n % div == 0) {
+			printf("Number is not simple\n");
+			return false;
+		}
+		else
+			return simple_num(n, div - 1);
 	}
 
-	return result;
+	return printf("Number is simple");
 }
 
-int Reverse(int num){
+int user_choose() {
 
-	return reverse(num, 0);
+	while (true) {
+
+		printf("Choose your metod: ");
+		scanf_s("%d\n", &num);
+		if (num >= RECURS && (num <= BASE))
+			return num;
+
+	}
+
 }
 
-int main(){
+int simple_method(int num) {
 
-	printf("%d\n", Reverse(123456));
+	printf("Simple method: \n");
 
-	return 0;
+	int sum = 0;
+
+	for (int i = 1; i < num; i++) {
+		if (num % i == 0) {
+			sum++;
+		}
+	}
+
+	if (sum == 2)
+		printf("The number is simple");
+	else
+		printf("The number is not simple");
+}
+
+int main() {
+
+	switch (user_choose())
+	{
+	case RECURS:
+		simple_num(num, div);
+		break;
+	case BASE:
+		simple_method(num);
+		break;
+	}
 }
