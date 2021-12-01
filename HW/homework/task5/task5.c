@@ -17,7 +17,8 @@
 // Initialization of parameters that will be responsible for user selection
 #define SORT_BY_INSERTS 0
 #define SORT_BY_COUNT 1
-#define EXIT_PROGRAMM 2
+#define HOARE_SORT 2
+#define EXIT_PROGRAMM 3
 
 #define SIZE 20
 
@@ -84,7 +85,7 @@ void get_size_from_dir(char* path) {
 choose_by_user() {
 	int num;
 
-	printf("Select sorting for program execution:\n 0 - Sort by Inserts\n 1 - Sort by Count\n 2 - Exit Programm\n");
+	printf("Select sorting for program execution:\n 0 - Sort by Inserts\n 1 - Sort by Count\n 2 - Hoare Sort\n 3 - Exit Programm\n");
 
 	while (true) {
 
@@ -100,7 +101,7 @@ choose_by_user() {
 //Sort by inserts
 void insert_sort(int insert[20][2],int size) {
 
-	int newElement, newElement1, location;
+	int newElement, newElement1, location, num_of_perm = 0;
 
 	for (int h = 1; h < size; h++)
 	{
@@ -115,6 +116,7 @@ void insert_sort(int insert[20][2],int size) {
 		}
 		insert[location + 1][0] = newElement;
 		insert[location + 1][1] = newElement1;
+		num_of_perm++;
 	}
 
 	printf("Sorted list of files by inerts is: \n File Name\t\t Size\n");
@@ -122,12 +124,13 @@ void insert_sort(int insert[20][2],int size) {
 		if (insert[j][1] > 0)
 			printf("%s\t\t%d Kb\n", files_in_dir[insert[j][0]], insert[j][1]);
 	}
+	printf("Number of permutations - %d\n", num_of_perm);
 }
 
 //Sort by count
-insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
+void insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
 
-	int k;
+	int k, num_of_perm = 0;
 	for (int i = 0; i < size; i++)
 	{
 		k = 0;
@@ -138,6 +141,7 @@ insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
 		}
 		sorted_mass[k][0] = insert[i][0];
 		sorted_mass[k][1] = insert[i][1];
+		num_of_perm++;
 	}
 
 	printf("Sorted list of files by count is: \n File Name\t\t Size\n");
@@ -145,7 +149,48 @@ insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
 		if (sorted_mass[j][1] > 0)
 			printf("%s\t\t%d Kb\n", files_in_dir[sorted_mass[j][0]], sorted_mass[j][1]);
 	}
+	printf("Number of permutations - %d\n", num_of_perm);
 
+}
+
+void hoare_sort(int s_arr[20][2], int n)
+{
+	int i = 0, j = n, x = s_arr[n / 2][1], tmp_1, tmp_2, num_of_perm = 0;
+
+	do {
+		while (s_arr[i][1] < x) 
+			i++;
+		while (s_arr[j][1] > x) 
+			j--;
+
+		if (i <= j) {
+			if (s_arr[i][1] > s_arr[j][1]) {
+				//size of file
+				tmp_1 = s_arr[i][1];
+				s_arr[i][1] = s_arr[j][1];
+				s_arr[j][1] = tmp_1;
+
+				//index of file
+				tmp_2 = s_arr[i][0];
+				s_arr[i][0] = s_arr[j][0];
+				s_arr[j][0] = tmp_2;
+				num_of_perm++;
+			}
+			i++;
+			j--;
+		}
+	} while (i <= j);
+
+	if (i < n)
+		hoare_sort(s_arr, i, n);
+	if (0 < j)
+		hoare_sort(s_arr, 0, j);
+
+	//printf("Sorted list of files by Hoare is: \n File Name\t\t Size\n");
+	//for (int j = 0; j < SIZE; j++) {
+	//	if (s_arr[j][1] > 0)
+	//		printf("%s\t\t%d Kb\n", files_in_dir[s_arr[j][0]], s_arr[j][1]);
+	//}
 }
 
 int main() {
@@ -174,6 +219,9 @@ int main() {
 		break;
 	case SORT_BY_COUNT:
 		insert_count(count_of_files, SIZE, sorted_mass);
+		break;
+	case HOARE_SORT:
+		hoare_sort(count_of_files, SIZE);
 		break;
 	case EXIT_PROGRAMM:
 		_Exit(EXIT_SUCCESS);
