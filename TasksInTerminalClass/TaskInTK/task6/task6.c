@@ -4,8 +4,8 @@
 #define false 0
 #endif
 
-#define RECURS 0
-#define BASE 1
+#define RECURS 1
+#define BASE 2
 
 #include <stdio.h>
 #include <math.h>
@@ -35,7 +35,7 @@ int user_choose() {
 
 	while (true) {
 
-		printf("Choose your metod: ");
+		printf("Choose your metod: \n 1 - Recursion method \n 2 - Simple method \n");
 		scanf_s("%d\n", &num);
 		if (num >= RECURS && (num <= BASE))
 			return num;
