@@ -1,5 +1,0 @@
-﻿  task5.c
-W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\task5\task5.c(25,76): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\task5\task5.c(40,59): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\task5\task5.c(96,76): warning C4244: =: преобразование "float" в "int", возможна потеря данных
-  task5.vcxproj -> W:\Informatics-and-Programming\TasksInTerminalClass\TaskInTK\Debug\task5.exe

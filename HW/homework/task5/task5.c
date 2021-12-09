@@ -26,6 +26,7 @@ char files_in_dir[SIZE][40];
 int count_of_files[SIZE][2];
 int i = 0;
 int sorted_mass[SIZE][2];
+int hoare_perm;
 
 
 
@@ -82,10 +83,10 @@ void get_size_from_dir(char* path) {
 }
 
 //User need to choose, what sort he want to use
-choose_by_user() {
+int choose_by_user() {
 	int num;
 
-	printf("Select sorting for program execution:\n 0 - Sort by Inserts\n 1 - Sort by Count\n 2 - Hoare Sort\n 3 - Exit Programm\n");
+	printf("\nSelect sorting for program execution:\n 0 - Sort by Inserts\n 1 - Sort by Count\n 2 - Hoare Sort\n 3 - Exit Programm\n");
 
 	while (true) {
 
@@ -113,10 +114,10 @@ void insert_sort(int insert[20][2],int size) {
 			insert[location + 1][1] = insert[location][1];
 			insert[location + 1][0] = insert[location][0];
 			location = location - 1;
+			num_of_perm++;
 		}
 		insert[location + 1][0] = newElement;
 		insert[location + 1][1] = newElement1;
-		num_of_perm++;
 	}
 
 	printf("Sorted list of files by inerts is: \n File Name\t\t Size\n");
@@ -136,12 +137,13 @@ void insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
 		k = 0;
 		for (int j = 0; j < size; j++)
 		{
-			if (insert[i][1] > insert[j][1])
+			if (insert[i][1] > insert[j][1]) {
 				k++;
+				num_of_perm++;
+			}
 		}
 		sorted_mass[k][0] = insert[i][0];
 		sorted_mass[k][1] = insert[i][1];
-		num_of_perm++;
 	}
 
 	printf("Sorted list of files by count is: \n File Name\t\t Size\n");
@@ -153,81 +155,98 @@ void insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
 
 }
 
-void hoare_sort(int s_arr[20][2], int n)
+void qs(int s_arr[20][2], int first, int last)
 {
-	int i = 0, j = n, x = s_arr[n / 2][1], tmp_1, tmp_2, num_of_perm = 0;
+	int i = first, j = last, x = s_arr[(first + last) / 2][1], tmp1, tmp2;
 
 	do {
-		while (s_arr[i][1] < x) 
-			i++;
-		while (s_arr[j][1] > x) 
-			j--;
+		while (s_arr[i][1] < x) i++;
+		while (s_arr[j][1] > x) j--;
 
 		if (i <= j) {
 			if (s_arr[i][1] > s_arr[j][1]) {
-				//size of file
-				tmp_1 = s_arr[i][1];
-				s_arr[i][1] = s_arr[j][1];
-				s_arr[j][1] = tmp_1;
 
-				//index of file
-				tmp_2 = s_arr[i][0];
+				tmp1 = s_arr[i][1];
+				s_arr[i][1] = s_arr[j][1];
+				s_arr[j][1] = tmp1;
+
+				tmp2 = s_arr[i][0];
 				s_arr[i][0] = s_arr[j][0];
-				s_arr[j][0] = tmp_2;
-				num_of_perm++;
+				s_arr[j][0] = tmp2;
+
+				hoare_perm++;
+			
 			}
 			i++;
 			j--;
 		}
 	} while (i <= j);
 
-	if (i < n)
-		hoare_sort(s_arr, i, n);
-	if (0 < j)
-		hoare_sort(s_arr, 0, j);
-
-	//printf("Sorted list of files by Hoare is: \n File Name\t\t Size\n");
-	//for (int j = 0; j < SIZE; j++) {
-	//	if (s_arr[j][1] > 0)
-	//		printf("%s\t\t%d Kb\n", files_in_dir[s_arr[j][0]], s_arr[j][1]);
-	//}
+	if (i < last)
+		qs(s_arr, i, last);
+	if (first < j)
+		qs(s_arr, first, j);
 }
+
 
 int main() {
 	char path[200];
+	time_t t0, t1;
+	double extime;
 
 
 	printf("Input path to dir: ");
 	gets(path);
-
 	get_size_from_dir(path);
-
 	for (int j = 0; j < i; j++) {
 		printf("%s\n", files_in_dir[j]);
 	}
 
-	printf("---------------------------------\n index\t size\n");
+	/*printf("---------------------------------\n index\t size\n");
 
 	for (int j = 0; j < i; j++) {
 		printf("%d\t%d\n", count_of_files[j][0], count_of_files[j][1]);
-	}
+	}*/
 
 	switch (choose_by_user())
 	{
 	case SORT_BY_INSERTS:
+
+		t0 = clock();
 		insert_sort(count_of_files, SIZE);
+		t1 = clock();
+		extime = (double)(t1 - t0) / 1000;
+		printf("\nTime of sort by Inserts is - %.7f", extime);
 		break;
+
 	case SORT_BY_COUNT:
+
+		t0 = clock();
 		insert_count(count_of_files, SIZE, sorted_mass);
+		t1 = clock();
+		extime = (double)(t1 - t0) / 1000;
+		printf("\nTime of sort by Count is - %.7f", extime);
 		break;
+
 	case HOARE_SORT:
-		hoare_sort(count_of_files, SIZE);
+
+		t0 = clock();
+		qs(count_of_files, 0, SIZE - 1);
+		t1 = clock();
+		extime = (double)(t1 - t0) / 1000;
+		printf("\nTime of sort by Hoare is - %.7f\n", extime);
+
+		for (int j = 0; j < SIZE; j++) {
+			if (count_of_files[j][1] > 0)
+				printf("%s\t\t%d Kb\n", files_in_dir[count_of_files[j][0]], count_of_files[j][1]);
+		}
+		printf("Number of permutation is - %d\n", hoare_perm);
 		break;
+
 	case EXIT_PROGRAMM:
 		_Exit(EXIT_SUCCESS);
 		break;
 	}
-
 
 	return 0;
 }
