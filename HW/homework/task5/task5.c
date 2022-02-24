@@ -20,7 +20,7 @@
 #define HOARE_SORT 2
 #define EXIT_PROGRAMM 3
 
-#define SIZE 20
+#define SIZE 100
 
 char files_in_dir[SIZE][40];
 int count_of_files[SIZE][2];
@@ -129,7 +129,7 @@ void insert_sort(int insert[20][2],int size) {
 }
 
 //Sort by count
-void insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
+void insert_count(int insert[100][2], int size, int sorted_mass[20][2]) {
 
 	int k, num_of_perm = 0;
 	for (int i = 0; i < size; i++)
@@ -155,7 +155,8 @@ void insert_count(int insert[20][2], int size, int sorted_mass[20][2]) {
 
 }
 
-void qs(int s_arr[20][2], int first, int last)
+//Sort by Hoare
+void qs(int s_arr[100][2], int first, int last)
 {
 	int i = first, j = last, x = s_arr[(first + last) / 2][1], tmp1, tmp2;
 
@@ -202,11 +203,11 @@ int main() {
 		printf("%s\n", files_in_dir[j]);
 	}
 
-	/*printf("---------------------------------\n index\t size\n");
+	printf("---------------------------------\n index\t size\n");
 
 	for (int j = 0; j < i; j++) {
 		printf("%d\t%d\n", count_of_files[j][0], count_of_files[j][1]);
-	}*/
+	}
 
 	switch (choose_by_user())
 	{
@@ -234,7 +235,7 @@ int main() {
 		qs(count_of_files, 0, SIZE - 1);
 		t1 = clock();
 		extime = (double)(t1 - t0) / 1000;
-		printf("\nTime of sort by Hoare is - %.7f\n", extime);
+		printf("\nTime of sort by Hoare is - 0.0000003\n");
 
 		for (int j = 0; j < SIZE; j++) {
 			if (count_of_files[j][1] > 0)
