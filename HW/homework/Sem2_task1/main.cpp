@@ -1,10 +1,10 @@
-//#include<vcl>
 #include<iostream>
 #include<math.h>
-//#include<stdio>
-//#include<conio>
-//#include <string>
 using namespace std;
+ 
+#define DAY 24
+#define MIN 60
+
 class Timee
 {
 private:
@@ -39,9 +39,9 @@ public:
 
 	void EditTime()
 	{
-		this->hour = (this->hour + (this->min / 60 + this->sec / 60)) % 24;
-		this->min = (this->min + this->sec / 60) % 60;
-		this->sec %= 60;
+		this->hour = (this->hour + (this->min / MIN + this->sec / MIN)) % DAY;
+		this->min = (this->min + this->sec / MIN) % MIN;
+		this->sec %= MIN;
 	}
 
 	void PlusTime(const Timee& time)
@@ -53,59 +53,11 @@ public:
 	void MinusTime(const Timee& time)
 	{
 		if ((hour - time.hour) < 0)
-			hour = 24 - abs(hour - time.hour);
+			hour = DAY - abs(hour - time.hour);
 		else
 			hour = hour - time.hour;
 		min = abs(min - time.min);
 		sec = abs(sec - time.sec);
 	}
 };
-
-int main()
-{
-	char str[80];
-	int a;
-
-	cout << "Enter Time in (Hour:Min:Sec) format: ";
-	cin >> str;
-
-	while (true)
-	{
-
-		cout << "Enter operation: " << endl << "1) 1 - minus" << endl << "2) 2 - plus" << endl << "3) 3 - exit" << endl;
-		cin >> a;
-		if (a == 3)
-			break;
-		if (a == 2)
-		{
-			Timee ob(str);
-			cout << "Enter Time in (Hour:Min:Sec) format: ";
-			cin >> str;
-			Timee ob2(str);
-			ob.PlusTime(ob2);
-			ob.EditTime();
-			ob.ShowTime();
-		}
-		if (a == 1)
-		{
-			Timee ob(str);
-			cout << "Enter Time in (Hour:Min:Sec) format: ";
-			cin >> str;
-			Timee ob3(str);
-			ob.MinusTime(ob3);
-			ob.EditTime();
-			ob.ShowTime();
-		}
-	}
-
-
-
-
-	/*if(ob==ob2)
-	cout«"ob==ob2";
-	if(ob!=ob1)
-	cout«"ob!=ob1"; */
-	system("Pause");
-
-}
 
