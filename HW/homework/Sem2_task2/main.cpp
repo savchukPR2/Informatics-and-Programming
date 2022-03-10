@@ -20,30 +20,23 @@ int main()
 		cin >> a;
 		if (a == 1)
 		{
-			ob.InDec();
 
 			cout << "Enter the second number in HEX format: ";
 			cin >> str;
 
 			Hex ob1(str);
-			ob1.InDec();
 
 			ob -= ob1;
-
-			ob.InHex();
-
 			ob.ShowHex();
 
 		}
 
 		if (a == 2)
 		{
-			ob.InDec();
 
 			cout << "Enter the second number in HEX format: ";
 			cin >> str;
 			Hex ob1(str);
-			ob1.InDec();
 
 			ob += ob1;
 			ob.ShowHex();
@@ -51,14 +44,11 @@ int main()
 
 		if (a == 3)
 		{
-			ob.InDec();
-			ob.InHex();
 			ob.ShowHex();
 		}
 
 		if (a == 4)
 		{
-			ob.InDec();
 			ob.ShowDec();
 		}
 

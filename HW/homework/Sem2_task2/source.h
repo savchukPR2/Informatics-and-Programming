@@ -4,13 +4,56 @@ using namespace std;
 
 #include<iostream>
 #include<math.h>
+#include<iomanip>
+#include <typeinfo>
 class Hex
 {
 private:
 	unsigned char* elem;
 	int num, dec;
-	string mainHex;
+	bool isDec;
+	std::string mainHex;
 public:
+
+	// Конструктор по умолчанию
+	Hex() {
+		num = 5; 
+		dec = 0; 
+		mainHex = ""; 
+		isDec = false;
+		elem = new unsigned char[num];
+		for (int i = 0; i < num; i++)
+			elem[i] = 0;
+	};
+
+	// Конструктор инициализации
+	Hex(unsigned char* _elem, int _num, int _dec, std::string _mainHex, bool _isDec) { 
+		elem = _elem;
+		num = _num;
+		isDec = _isDec;
+		dec = _dec;
+		mainHex = _mainHex;
+		elem = new unsigned char[num];
+		for (int i = 0; i < num; i++)
+			elem[i] = _elem[i];
+	};
+
+	// Конструктор копирования
+	Hex(const Hex& hex) { 
+		num = hex.num;
+		dec = hex.dec;
+		isDec = hex.isDec;
+		mainHex = hex.mainHex;
+		elem = new unsigned char[num];
+		for (int i = 0; i < num; i++)
+			elem[i] = hex.elem[i];
+	};
+
+	// Деструктор (удаление памяти, выделенной под массив)
+	~Hex() {
+		delete[] elem;
+	};
+
 	Hex(char* str)
 	{
 		num = strlen(str);
@@ -21,172 +64,71 @@ public:
 		{
 			elem[i] = str[num - i];
 		}
-	}
 
-	void InDec()
+		isDec = true;
+		InDec(this->num);
+	}
+private:
+	void InDec(int num)
 	{
 		int k = 0;
 
-		for (int i = 1; i <= num; i++)
-		{
-			switch (elem[i])
+		if (isDec) {
+			for (int i = 1; i <= num; i++)
 			{
-			case 'A':
-				k = 10;
-				break;
-			case 'B':
-				k = 11;
-				break;
-			case 'C':
-				k = 12;
-				break;
-			case 'D':
-				k = 13;
-				break;
-			case 'E':
-				k = 14;
-				break;
-			case 'F':
-				k = 15;
-				break;
-			case '0':
-				k = 0;
-				break;
-			case '1':
-				k = 1;
-				break;
-			case '2':
-				k = 2;
-				break;
-			case '3':
-				k = 3;
-				break;
-			case '4':
-				k = 4;
-				break;
-			case '5':
-				k = 5;
-				break;
-			case '6':
-				k = 6;
-				break;
-			case '7':
-				k = 7;
-				break;
-			case '8':
-				k = 8;
-				break;
-			case '9':
-				k = 9;
-				break;
+				if (elem[i] > 64 && elem[i] < 71) {
+					k = (int)(elem[i] - 55);
+					this->dec += k * pow(16, i - 1);
+				}
+				if (elem[i] > 47 && elem[i] < 58) {
+					k = (int)(elem[i] - 48);
+					this->dec += k * pow(16, i - 1);
+				}
 			}
-			dec += k * pow(16, i - 1);
 		}
+
+		isDec = false;
 	}
-
-	void InHex()
+public:
+	void InHex(int num)
 	{
-		int a = this->dec;
-		int k = 0;
-		int flag = 0;
-		string s;
-		while (a > 0)
-		{
-			k = a % 16;
-			switch (k)
-			{
-			case 0:
-				mainHex.insert(flag, "0");
-				flag += 1;
-				break;
-			case 1:
-				mainHex.insert(flag, "1");
-				flag += 1;
-				break;
-			case 2:
-				mainHex.insert(flag, "2");
-				flag += 1;
-				break;
-			case 3:
-				mainHex.insert(flag, "3");
-				flag += 1;
-				break;
-			case 4:
-				mainHex.insert(flag, "4");
-				flag += 1;
-				break;
-			case 5:
-				mainHex.insert(flag, "5");
-				flag += 1;
-				break;
-			case 6:
-				mainHex.insert(flag, "6");
-				flag += 1;
-				break;
-			case 7:
-				mainHex.insert(flag, "7");
-				flag += 1;
-				break;
-			case 8:
-				mainHex.insert(flag, "8");
-				flag += 1;
-				break;
-			case 9:
-				mainHex.insert(flag, "9");
-				flag += 1;
-				break;
-			case 10:
-				mainHex.insert(flag, "A");
-				flag += 1;
-				break;
-			case 11:
-				mainHex.insert(flag, "B");
-				flag += 1;
-				break;
-			case 12:
-				mainHex.insert(flag, "C");
-				flag += 1;
-				break;
-			case 13:
-				mainHex.insert(flag, "D");
-				flag += 1;
-				break;
-			case 14:
-				mainHex.insert(flag, "E");
-				flag += 1;
-				break;
-			case 15:
-				mainHex.insert(flag, "F");
-				flag += 1;
-				break;
+		int n = num;
+		std::string k;
+
+		while (n > 0) {
+			if (n % 16 > 9) {
+				k += char((n % 16) + 55);
 			}
-			a /= 16;
+			if ((n % 16) < 10) {
+				k += char((n % 16) + 48);
+			}
+			n = n / 16;
 		}
 
-		std::reverse(mainHex.begin(), mainHex.end());
-
+		this->mainHex = std::string(k.crbegin(),k.crend());
 	}
 
 	void ShowDec()
 	{
-		std::cout << "Number in DEC format = " << dec << std::endl;
+		std::cout << "Number in DEC format: " << this->dec << std::endl;
 	}
 
 	void ShowHex()
 	{
-		std::cout << "Number in HEX format = " << mainHex << std::endl;
+		InHex(dec);
+		std::cout << "Number in HEX format: " << this->mainHex << std::endl;
 	}
 
-	Hex& operator += (const Hex& hex)
+	Hex& operator+=(const Hex& hex)
 	{
-		dec += hex.dec;
+		this->dec += hex.dec;
 
 		return *this;
 	}
 
-	Hex& operator -= (const Hex& hex)
+	Hex& operator-=(const Hex& hex)
 	{
-		dec -= hex.dec;
+		this->dec -= hex.dec;
 
 		return *this;
 	}
