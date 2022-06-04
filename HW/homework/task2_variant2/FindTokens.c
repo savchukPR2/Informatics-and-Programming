@@ -4,6 +4,7 @@
 #define STATE_BAD_CHARS 1
 #define STATE_NUM 2
 #define STATE_STR 3
+#define _CRT_SECURE_NO_WARNINGS
 
 int count_num = 0, count_str = 0, state;
 

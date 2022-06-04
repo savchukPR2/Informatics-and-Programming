@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-int main() //Start programm 
+int main() //Start programm
 {
 
 	/*Enter x1, y1 of the first circle, as well as its R*/
